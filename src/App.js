@@ -4,6 +4,7 @@ import TouristInformationsCards from "./components/TouristInfo";
 import Bookings from "./components/Bookings";
 import Footer from "./components/Footer";
 import "./App.css";
+import Restaurant from "./components/Restaurant";
 
 const App = () => {
   return (
@@ -11,6 +12,7 @@ const App = () => {
       <HeaderElement />
       <TouristInformationsCards />
       <Bookings />
+      <Restaurant />
       <Footer
         footerArray={[
           "123 Fake Street, London, E1 4UD",
