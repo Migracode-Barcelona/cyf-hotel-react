@@ -4,18 +4,17 @@ import SearchResults from "./SearchResults.js";
 import fakeBookings from "../data/fakeBookings.json";
 
 const Bookings = () => {
+  const [bookings, setBooking] = useState(fakeBookings);
+
   const search = searchVal => {
     console.info("TO DO!", searchVal);
   };
-  // const setBookings = () => {
-  //   const
-  // }
 
   return (
     <div className="App-content">
       <div className="container">
         <Search search={search} />
-        <SearchResults results={fakeBookings} />
+        <SearchResults results={bookings} />
       </div>
     </div>
   );
