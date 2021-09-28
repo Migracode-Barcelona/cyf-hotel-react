@@ -24,6 +24,11 @@ const TableRow = props => (
     <td scope="col">
       {daysBetweenDates(props.booking.checkOutDate, props.booking.checkInDate)}
     </td>
+    <td>
+      <button onClick={() => props.setShowProfile(props.booking.id)}>
+        Show Profile
+      </button>
+    </td>
   </tr>
 );
 
@@ -59,6 +64,7 @@ const SearchResults = props => {
           <th scope="col">Check-in-Date</th>
           <th scope="col">Check-out-Date</th>
           <th scope="col">Nights</th>
+          <th scope="col" />
         </tr>
       </thead>
       <tbody>
@@ -66,6 +72,7 @@ const SearchResults = props => {
           <TableRow
             key={i}
             booking={booking}
+            setShowProfile={val => props.onShowCustomerProfile(val)}
             handleClick={() => toggleSelectedAtPosition(i)}
             isSelected={selectedRows.includes(i)}
           />
