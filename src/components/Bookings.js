@@ -2,16 +2,25 @@ import React, { useState, useEffect } from "react";
 import Search from "./Search.js";
 import SearchResults from "./SearchResults.js";
 import CustomerProfile from "./CustomerProfile.js";
+import NewBookings from "./NewBookings.js";
 
-const Bookings = () => {
+const Bookings = props => {
   const [bookings, setBooking] = useState([]);
   const [searchVal, setSearchVal] = useState("");
   const [customerProfileId, setCustomerProfileId] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
+  // const [toConcat, setToContact] = useState([]);
+  // const [inputForm, setInputForm] = useState("");
+
+  // const catchEntry = () => {
+  //   const newConcat = bookings.concat(inputForm);
+  //   setBooking(newConcat);
+  //   setInputForm("");
+  // };
 
   useEffect(() => {
-    fetch(`https://cyf-react.glitch.me/delayed`)
+    fetch(`https://cyf-react.glitch.me/`)
       .then(res => res.json())
       .then(data => {
         if (data.error) throw new Error(data.error);
@@ -50,15 +59,73 @@ const Bookings = () => {
 
         {customerProfileId && <CustomerProfile id={customerProfileId} />}
       </div>
-      <form>
-        <label htmlFor="customerName">Booking Form</label>
-        <input First Name type="text" placeholder="first name" />
-        <input First Name type="text" placeholder="Surname" />
-        <input First Name type="text" placeholder="Title" />
-        <input First Name type="text" placeholder="Room Id" />
-        <input First Name type="text" placeholder="Check In Date" />
-        <input First Name type="text" placeholder="Check out Date" />
+      {/* <form onSubmit={props.handleSubmit}>
+        <h1>Booking Form</h1>
+        <label> First Name :</label>
+        <input
+          onChange={props.handleSearchInput}
+          value={props.searchInput}
+          type="text"
+          id="customerName"
+          className="form-control"
+          placeholder="first name"
+        />
+        <label> Surname :</label>
+        <input
+          onChange={props.handleSearchInput}
+          value={props.searchInput}
+          type="text"
+          id="customerName"
+          className="form-control"
+          placeholder="Surname"
+        />
+        <label> Title :</label>
+        <input
+          onChange={props.handleSearchInput}
+          value={props.searchInput}
+          type="text"
+          id="customerName"
+          className="form-control"
+          placeholder="title"
+        />
+        <label> Email :</label>
+        <input
+          onChange={props.handleSearchInput}
+          value={props.searchInput}
+          type="text"
+          id="customerName"
+          className="form-control"
+          placeholder=" email"
+        />
+        <label> Check In Date :</label>
+        <input
+          onChange={props.handleSearchInput}
+          value={props.searchInput}
+          type="text"
+          id="customerName"
+          className="form-control"
+          placeholder="check-in-date"
+        />
+        <label> Check Out Date :</label>
+        <input
+          onChange={props.handleSearchInput}
+          value={props.searchInput}
+          type="text"
+          id="customerName"
+          className="form-control"
+          placeholder="check-out-date"
+        />
       </form>
+
+      <button onClick={catchEntry} className="btn btn-primary">
+        Submit
+      </button>
+      <ul>
+        {toConcat.map((entry, index) => (
+          <li key={index}>{entry}</li>
+        ))}
+      </ul> */}
+      <NewBookings />
     </div>
   );
 };
