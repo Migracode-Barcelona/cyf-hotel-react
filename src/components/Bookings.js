@@ -4,41 +4,42 @@ import SearchResults from "./SearchResults.js";
 import CustomerProfile from "./CustomerProfile.js";
 import NewBookings from "./NewBookings.js";
 
-const Bookings = props => {
-  const [bookings, setBooking] = useState([]);
+const Bookings = () => {
+  const [bookings, setBookings] = useState([]);
   const [searchVal, setSearchVal] = useState("");
   const [customerProfileId, setCustomerProfileId] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
-  // const [toConcat, setToContact] = useState([]);
-  // const [inputForm, setInputForm] = useState("");
 
-  // const catchEntry = () => {
-  //   const newConcat = bookings.concat(inputForm);
-  //   setBooking(newConcat);
-  //   setInputForm("");
-  // };
+  const addToBooking = booking => {
+    const newBookings = bookings.concat(booking);
+    // const anotherBookings = [...bookings, booking]
+
+    setBookings(newBookings);
+  };
 
   useEffect(() => {
+    setIsLoading(true);
     fetch(`https://cyf-react.glitch.me/`)
       .then(res => res.json())
       .then(data => {
         if (data.error) throw new Error(data.error);
 
-        const bookings = searchVal
-          ? data.filter(
-              value =>
-                value.firstName === searchVal || value.surname === searchVal
-            )
-          : data;
-        setBooking(bookings);
+        // set the full result
+        setBookings(data);
         setIsLoading(false);
       })
       .catch(e => {
         setError(e.message);
         setIsLoading(false);
       });
-  }, [searchVal]);
+  }, []); // empty array means only run ONCE, when the component first loads
+
+  const filteredBookings = searchVal
+    ? bookings.filter(
+        value => value.firstName === searchVal || value.surname === searchVal
+      )
+    : bookings;
 
   // onSearch should filter the booking results and only include ones where the first or last
   // name match the search value
@@ -52,80 +53,14 @@ const Bookings = props => {
           <p>Loading...</p>
         ) : (
           <SearchResults
-            results={bookings}
+            results={filteredBookings}
             onShowCustomerProfile={setCustomerProfileId}
           />
         )}
 
         {customerProfileId && <CustomerProfile id={customerProfileId} />}
       </div>
-      {/* <form onSubmit={props.handleSubmit}>
-        <h1>Booking Form</h1>
-        <label> First Name :</label>
-        <input
-          onChange={props.handleSearchInput}
-          value={props.searchInput}
-          type="text"
-          id="customerName"
-          className="form-control"
-          placeholder="first name"
-        />
-        <label> Surname :</label>
-        <input
-          onChange={props.handleSearchInput}
-          value={props.searchInput}
-          type="text"
-          id="customerName"
-          className="form-control"
-          placeholder="Surname"
-        />
-        <label> Title :</label>
-        <input
-          onChange={props.handleSearchInput}
-          value={props.searchInput}
-          type="text"
-          id="customerName"
-          className="form-control"
-          placeholder="title"
-        />
-        <label> Email :</label>
-        <input
-          onChange={props.handleSearchInput}
-          value={props.searchInput}
-          type="text"
-          id="customerName"
-          className="form-control"
-          placeholder=" email"
-        />
-        <label> Check In Date :</label>
-        <input
-          onChange={props.handleSearchInput}
-          value={props.searchInput}
-          type="text"
-          id="customerName"
-          className="form-control"
-          placeholder="check-in-date"
-        />
-        <label> Check Out Date :</label>
-        <input
-          onChange={props.handleSearchInput}
-          value={props.searchInput}
-          type="text"
-          id="customerName"
-          className="form-control"
-          placeholder="check-out-date"
-        />
-      </form>
-
-      <button onClick={catchEntry} className="btn btn-primary">
-        Submit
-      </button>
-      <ul>
-        {toConcat.map((entry, index) => (
-          <li key={index}>{entry}</li>
-        ))}
-      </ul> */}
-      <NewBookings />
+      <NewBookings onSubmit={addToBooking} />
     </div>
   );
 };

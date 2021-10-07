@@ -1,15 +1,13 @@
 import React, { useState } from "react";
 
-const NewBookings = () => {
+const NewBookings = props => {
   const [title, setTitle] = useState("");
   const [firstName, setFirstName] = useState("");
   const [surname, setSurname] = useState("");
+  const [email, setEmail] = useState("");
   const [roomId, setRoomId] = useState("");
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
-  const [bookings, setBooking] = useState([]);
-  const [inputForm, setInputForm] = useState("");
-  const [toConcat, setToConcat] = useState([]);
 
   const handleTitleChange = event => {
     setTitle(event.target.value);
@@ -19,6 +17,9 @@ const NewBookings = () => {
   };
   const handleSurnameChange = event => {
     setSurname(event.target.value);
+  };
+  const handleEmailChange = event => {
+    setEmail(event.target.value);
   };
   const handleRoomIdChange = event => {
     setRoomId(event.target.value);
@@ -31,12 +32,17 @@ const NewBookings = () => {
   };
   const handleSubmit = event => {
     event.preventDefault();
-  };
 
-  const catchEntry = () => {
-    const newConcat = bookings.concat(inputForm);
-    setBooking(newConcat);
-    setInputForm("");
+    // all properties here must match the ones we're using in SearchResults.js
+    props.onSubmit({
+      title,
+      firstName,
+      surname,
+      email,
+      roomId,
+      checkInDate: checkIn,
+      checkOutDate: checkOut
+    });
   };
 
   return (
@@ -81,6 +87,15 @@ const NewBookings = () => {
         <div>
           <input
             type="text"
+            name="email"
+            placeholder="email"
+            value={email}
+            onChange={handleEmailChange}
+          />
+        </div>
+        <div>
+          <input
+            type="text"
             name="checkIn"
             placeholder="Check-In"
             value={checkIn}
@@ -96,13 +111,8 @@ const NewBookings = () => {
             onChange={handleCheckOutChange}
           />
         </div>
+        <button>Submit</button>
       </form>
-      <button onClick={catchEntry}>Submmit</button>
-      <ul>
-        {toConcat.map((entry, index) => (
-          <li key={index}>{entry}</li>
-        ))}
-      </ul>
     </div>
   );
 };
