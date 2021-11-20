@@ -71,3 +71,6 @@ tr {
 .card {
   width: 18rem;
 }
+.toPoint {
+  cursor: pointer;
+}
