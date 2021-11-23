@@ -33,7 +33,7 @@ const TableRow = props => (
   </tr>
 );
 
-const SearchResults = props => {
+const SearchResults = ({ results, onShowCustomerProfile }) => {
   const [selectedRows, setSelectedRows] = useState([]);
   // removes or adds an index to the selectedRows state array variable
   const toggleSelectedAtPosition = index => {
@@ -53,60 +53,74 @@ const SearchResults = props => {
     }
   };
   const [result, setResult] = useState([]);
-  // const [sorted, setIsSorted] = useState(false);
   const [sortedBy, setSortedBy] = useState({
     order: "ASC",
-    field: "firstName"
+    field: "id"
   });
+
+  //const { order, field } = sortedBy;
+
   useEffect(() => {
-    let results = [...props.results];
     console.log("fieldName", sortedBy.field);
 
     results.sort((a, b) => {
       const titleNameA = a[sortedBy.field];
       const titleNameB = b[sortedBy.field];
+      // return 0
+      // return > 1
+      // return < 1
+      // 5, 9
+      // titleNameA 10
+      // titleNameB 5
+      // titleNameA - titleNameB (5) DSC
+      // (titleNameA - titleNameB) * -1 (-5) ASC
+      let mult;
+      // sortedBy.order ==> 'ASC' || 'DSC'
+      if (sortedBy.order !== "ASC") {
+        mult = -1;
+      } else {
+        mult = 1;
+      }
+
       if (isNaN(titleNameA)) {
         // TODO: use the sortby.order
-        return titleNameA.localeCompare(titleNameB);
+        return titleNameA.localeCompare(titleNameB) * mult;
       }
-      return titleNameA - titleNameB;
+
+      return (titleNameA - titleNameB) * mult;
     });
 
     setResult(results);
-  }, [props.results, sortedBy]);
+  }, [results, sortedBy]);
 
   const clickHandler = e => {
     let fieldClicked = e.target.getAttribute("value");
 
-    // add code here to figure out which field was actually clicked
-    // let state = {field: 'firstName', order: 'ASC'}
-    setSortedBy(
-      ({
-        title,
-        firstName,
-        surname,
-        email,
-        roomId,
-        checkInDate,
-        checkOutDate
-      }) => {
-        // const newState = { ...state };
+    if (sortedBy.field !== fieldClicked) {
+      setSortedBy(previousState => {
         const newState = {
-          title,
-          firstName,
-          surname,
-          email,
-          roomId,
-          checkInDate,
-          checkOutDate
+          ...previousState
         };
-        // TODO: set order
 
         newState.field = fieldClicked;
 
         return newState;
-      }
-    );
+      });
+    } else {
+      setSortedBy(previousState => {
+        const newState = {
+          ...previousState
+        };
+        if (sortedBy.order !== "ASC") {
+          newState.order = "ASC";
+
+          return newState;
+        } else {
+          newState.order = "DSC";
+          return newState;
+        }
+      });
+    }
   };
   console.log(result);
   return (
@@ -188,7 +202,7 @@ const SearchResults = props => {
           <TableRow
             key={booking.id}
             booking={booking}
-            setShowProfile={val => props.onShowCustomerProfile(val)}
+            setShowProfile={val => onShowCustomerProfile(val)}
             handleClick={() => toggleSelectedAtPosition(i)}
             isSelected={selectedRows.includes(i)}
           />
